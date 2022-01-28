@@ -3,7 +3,7 @@ import SignInForm from '../components/SignInForm.jsx';
 
 const Login = () => (
   <>
-    <h1>Login page</h1>
+    <h1 className="text-center mb-5">Login page</h1>
     <SignInForm />
   </>
 );

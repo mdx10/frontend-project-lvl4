@@ -1,75 +1,58 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import {
-  Formik,
-  Field,
-  Form,
-  ErrorMessage,
-} from 'formik';
+import { Form, Button } from 'react-bootstrap';
+import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
-  userName: yup.string().required('Required'),
-  password: yup.string().required('Required'),
+  username: yup.string().required('Введите ник'),
+  password: yup.string().required('Введите пароль'),
 });
 
-const SignInForm = () => (
-  <Formik
-    initialValues={{ userName: '', password: '' }}
-    validationSchema={validationSchema}
-    onSubmit={(values, { resetForm }) => {
-      console.log(values);
-      resetForm();
-    }}
-  >
-    {({ errors, touched }) => (
-      <Form className="m-auto" style={{ maxWidth: '350px' }} autoComplete="off">
-        <div className="mb-3">
-          <label htmlFor="userName" className="form-label">
-            Name
-          </label>
-          <Field
-            name="userName"
-            id="userName"
-            type="text"
-            className={
-              errors.userName && touched.userName
-                ? 'form-control is-invalid'
-                : 'form-control'
-            }
-          />
-          <ErrorMessage
-            name="userName"
-            component="div"
-            className="invalid-feedback"
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <Field
-            name="password"
-            id="password"
-            type="password"
-            className={
-              errors.password && touched.password
-                ? 'form-control is-invalid'
-                : 'form-control'
-            }
-          />
-          <ErrorMessage
-            className="invalid-feedback"
-            component="div"
-            name="password"
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </Form>
-    )}
-  </Formik>
-);
+const handleSubmit = (values) => {
+  console.log(values);
+};
+
+const SignInForm = () => {
+  const f = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
+  return (
+    <Form onSubmit={f.handleSubmit} className="m-auto" style={{ maxWidth: '350px' }} autoComplete="off">
+      <Form.FloatingLabel className="mb-3" controlId="username" label="Ваш ник">
+        <Form.Control
+          name="username"
+          type="text"
+          placeholder="Ваш ник"
+          onChange={f.handleChange}
+          onBlur={f.handleBlur}
+          value={f.values.username}
+          isInvalid={f.errors.username && f.touched.username}
+        />
+        {f.errors.username && <Form.Control.Feedback type="invalid">{f.errors.username}</Form.Control.Feedback>}
+      </Form.FloatingLabel>
+      <Form.FloatingLabel className="mb-3" controlId="password" label="Пароль">
+        <Form.Control
+          name="password"
+          type="password"
+          placeholder="Пароль"
+          onChange={f.handleChange}
+          onBlur={f.handleBlur}
+          value={f.values.password}
+          isInvalid={f.errors.password && f.touched.password}
+        />
+        {f.errors.password && <Form.Control.Feedback type="invalid">{f.errors.password}</Form.Control.Feedback>}
+      </Form.FloatingLabel>
+      <Button type="submit" variant="outline-primary">
+        Войти
+      </Button>
+    </Form>
+  );
+};
 
 export default SignInForm;
