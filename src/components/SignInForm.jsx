@@ -1,29 +1,22 @@
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import routes from '../routes.js';
+import useAutn from '../hooks/useAuth.js';
 
 const validationSchema = yup.object({
   username: yup.string().required('Введите ник'),
   password: yup.string().required('Введите пароль'),
 });
 
-const handleSubmit = async (values, { setStatus }) => {
-  try {
-    setStatus({});
-    const { data } = await axios.post(routes.loginPath(), values);
-    console.log(data);
-  } catch (err) {
-    if (err.isAxiosError && err.response.status === 401) {
-      setStatus({ authFailed: 'Неверные имя пользователя или пароль' });
-    }
-    console.error(err);
-  }
-};
-
 const SignInForm = () => {
+  const { logIn } = useAutn();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || '/';
   const f = useFormik({
     initialValues: {
       username: '',
@@ -31,7 +24,20 @@ const SignInForm = () => {
     },
     initialStatus: {},
     validationSchema,
-    onSubmit: handleSubmit,
+    onSubmit: async (values, { setStatus }) => {
+      try {
+        setStatus({});
+        const { data } = await axios.post(routes.loginPath(), values);
+        logIn(data);
+        navigate(from, { replace: true });
+        console.log(data);
+      } catch (err) {
+        if (err.isAxiosError && err.response.status === 401) {
+          setStatus({ authFailed: 'Неверные имя пользователя или пароль' });
+        }
+        console.error(err);
+      }
+    },
   });
   return (
     <Form
