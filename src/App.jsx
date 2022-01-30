@@ -6,7 +6,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import Login from './pages/Login.jsx';
-import Main from './pages/Main.jsx';
+import Chat from './pages/Chat.jsx';
 import NotFound from './pages/NotFound.jsx';
 import { AutnProvider } from './contexts/authContext.jsx';
 
@@ -26,7 +26,7 @@ const App = () => (
         path="/"
         element={(
           <RequireAuth>
-            <Main />
+            <Chat />
           </RequireAuth>
         )}
       />
