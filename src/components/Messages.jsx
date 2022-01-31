@@ -1,30 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import useAuth from '../hooks/useAuth.js';
 
-const Messages = () => {
+const Messages = ({ socket }) => {
+  const { user } = useAuth();
   const { messages } = useSelector((state) => state.messagesReducer);
+  const [text, setText] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (text.trim()) {
+      const message = {
+        body: text,
+        channelId: 1,
+        username: user.username,
+      };
+      socket.emit('newMessage', message);
+      setText('');
+    }
+  };
+
   return (
     <div className="d-flex flex-column h-100">
       <div className="bg-light mb-4 p-3 shadow-sm small">
         <p className="m-0">
           <b># general</b>
         </p>
-        <span className="text-muted">5 сообщений</span>
+        <span className="text-muted">
+          {messages.length}
+          {' сообщений'}
+        </span>
       </div>
       <div id="messages-box" className="chat-messages overflow-auto px-5">
         {messages.length > 0 && messages.map(({ id, body, username }) => (
           <div className="text-break mb-2" key={id}>
             <b>{username}</b>
-            :
+            {': '}
             {body}
           </div>
         ))}
       </div>
       <div className="mt-auto px-5 py-3">
-        <Form className="py-1 border rounded-2">
+        <Form onSubmit={handleSubmit} className="py-1 border rounded-2" autoComplete="off">
           <InputGroup hasValidation>
             <Form.Control
+              value={text}
+              onChange={(e) => setText(e.target.value)}
               className="border-0 p-0 ps-2"
               name="body"
               type="text"

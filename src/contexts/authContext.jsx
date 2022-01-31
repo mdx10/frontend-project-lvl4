@@ -3,7 +3,7 @@ import React, { createContext, useState } from 'react';
 const AutnContext = createContext({});
 
 const AutnProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
 
   const authProviderValues = {
     user,

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 const Channels = () => {
   const { channels } = useSelector((state) => state.channelsReducer);
-  console.log(channels);
+
   return (
     <>
       <div className="d-flex justify-content-between mb-2 ps-4 pe-2">

@@ -5,16 +5,16 @@ import {
   Row,
   Col,
 } from 'react-bootstrap';
+import { io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
 import { setChannels } from '../slices/channelsSlice.js';
-import { setMessages } from '../slices/messagesSlice.js';
+import { setMessages, addMessage } from '../slices/messagesSlice.js';
 import routes from '../routes.js';
 import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
+import useAuth from '../hooks/useAuth.js';
 
-const getAuthHeader = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-
+const getAuthHeader = (user) => {
   if (user && user.token) {
     return { Authorization: `Bearer ${user.token}` };
   }
@@ -23,17 +23,28 @@ const getAuthHeader = () => {
 };
 
 const Chat = () => {
+  const socket = io();
+  const { user } = useAuth();
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
+      const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader(user) });
       dispatch(setChannels(data.channels));
       dispatch(setMessages(data.messages));
       console.log(data);
     };
     fetchData();
-  });
+  }, []);
+
+  useEffect(() => {
+    const listener = (message) => {
+      dispatch(addMessage(message));
+      console.log(message);
+    };
+    socket.on('newMessage', listener);
+    return () => socket.off('newMessage', listener);
+  }, []);
 
   return (
     <div className="d-flex flex-column h-100">
@@ -44,7 +55,7 @@ const Chat = () => {
             <Channels />
           </Col>
           <Col className="h-100 p-0">
-            <Messages />
+            <Messages socket={socket} />
           </Col>
         </Row>
       </Container>
