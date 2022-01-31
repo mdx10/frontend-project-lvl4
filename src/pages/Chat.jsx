@@ -1,20 +1,33 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import {
+  Container,
+  Row,
+  Col,
+} from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { setChannels } from '../slices/channelsSlice.js';
 import { setMessages } from '../slices/messagesSlice.js';
 import routes from '../routes.js';
+import Channels from '../components/Channels.jsx';
+import Messages from '../components/Messages.jsx';
+
+const getAuthHeader = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  if (user && user.token) {
+    return { Authorization: `Bearer ${user.token}` };
+  }
+
+  return {};
+};
 
 const Chat = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(
-        routes.dataPath(),
-        { headers: { Authorization: `Bearer ${user.token}` } },
-      );
+      const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader() });
       dispatch(setChannels(data.channels));
       dispatch(setMessages(data.messages));
       console.log(data);
@@ -23,7 +36,19 @@ const Chat = () => {
   });
 
   return (
-    <h1>Main page</h1>
+    <div className="d-flex flex-column h-100">
+      <nav>Header</nav>
+      <Container className="h-100 my-4 overflow-hidden rounded shadow">
+        <Row className="h-100 bg-white">
+          <Col className="border-end pt-5 px-0 bg-light" xs={4} md={2}>
+            <Channels />
+          </Col>
+          <Col className="h-100 p-0">
+            <Messages />
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
