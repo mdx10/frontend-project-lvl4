@@ -7,7 +7,12 @@ import socket from '../socket.js';
 
 const Messages = () => {
   const { user } = useAuth();
-  const { messages } = useSelector((state) => state.messagesReducer);
+  const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
+  const messages = useSelector((state) => {
+    const currentMessages = state.messagesReducer.messages
+      .filter(({ channelId }) => channelId === currentChannelId);
+    return currentMessages;
+  });
   const [text, setText] = useState('');
   const dispatch = useDispatch();
 
@@ -25,7 +30,7 @@ const Messages = () => {
     if (text.trim()) {
       const message = {
         body: text,
-        channelId: 1,
+        channelId: currentChannelId,
         username: user.username,
       };
       socket.emit('newMessage', message);

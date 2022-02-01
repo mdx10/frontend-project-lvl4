@@ -1,9 +1,12 @@
 import React from 'react';
 import { Nav, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentChannelId } from '../slices/currentChannelIdSlice';
 
 const Channels = () => {
   const { channels } = useSelector((state) => state.channelsReducer);
+  const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -17,14 +20,19 @@ const Channels = () => {
         </Button>
       </div>
       <Nav className="flex-column px-2" fill variant="pills">
-        {channels.length > 0 && channels.map((channel) => (
-          <Nav.Item className="w-100" key={channel.id}>
-            <button type="button" className="w-100 rounded-0 text-start btn">
-              <span className="me-1">#</span>
-              {channel.name}
-            </button>
-          </Nav.Item>
-        ))}
+        {channels.length > 0 && channels.map((channel) => {
+          const classes = channel.id === currentChannelId
+            ? 'w-100 rounded-0 text-start btn btn-secondary'
+            : 'w-100 rounded-0 text-start btn';
+          return (
+            <Nav.Item className="w-100" key={channel.id}>
+              <button onClick={() => dispatch(setCurrentChannelId(channel.id))} type="button" className={classes}>
+                <span className="me-1">#</span>
+                {channel.name}
+              </button>
+            </Nav.Item>
+          );
+        })}
       </Nav>
     </>
   );

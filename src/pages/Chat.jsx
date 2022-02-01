@@ -4,10 +4,11 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { setChannels } from '../slices/channelsSlice.js';
 import { setMessages } from '../slices/messagesSlice.js';
-import routes from '../routes.js';
+import { setCurrentChannelId } from '../slices/currentChannelIdSlice.js';
 import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
 import useAuth from '../hooks/useAuth.js';
+import routes from '../routes.js';
 
 const getAuthHeader = (user) => {
   if (user && user.token) {
@@ -26,6 +27,7 @@ const Chat = () => {
       const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader(user) });
       dispatch(setChannels(data.channels));
       dispatch(setMessages(data.messages));
+      dispatch(setCurrentChannelId(data.currentChannelId));
       console.log(data);
     };
     fetchData();
