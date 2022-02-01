@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import {
-  Container,
-  Row,
-  Col,
-} from 'react-bootstrap';
-import { io } from 'socket.io-client';
+import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { setChannels } from '../slices/channelsSlice.js';
-import { setMessages, addMessage } from '../slices/messagesSlice.js';
+import { setMessages } from '../slices/messagesSlice.js';
 import routes from '../routes.js';
 import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
@@ -23,7 +18,6 @@ const getAuthHeader = (user) => {
 };
 
 const Chat = () => {
-  const socket = io();
   const { user } = useAuth();
   const dispatch = useDispatch();
 
@@ -37,15 +31,6 @@ const Chat = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const listener = (message) => {
-      dispatch(addMessage(message));
-      console.log(message);
-    };
-    socket.on('newMessage', listener);
-    return () => socket.off('newMessage', listener);
-  }, []);
-
   return (
     <div className="d-flex flex-column h-100">
       <nav>Header</nav>
@@ -55,7 +40,7 @@ const Chat = () => {
             <Channels />
           </Col>
           <Col className="h-100 p-0">
-            <Messages socket={socket} />
+            <Messages />
           </Col>
         </Row>
       </Container>

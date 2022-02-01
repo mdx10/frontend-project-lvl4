@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
+import socket from '../socket.js';
 
-const Messages = ({ socket }) => {
+const Messages = () => {
   const { user } = useAuth();
   const { messages } = useSelector((state) => state.messagesReducer);
   const [text, setText] = useState('');
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const listener = (message) => {
+      dispatch(addMessage(message));
+      console.log(message);
+    };
+    socket.on('newMessage', listener);
+    return () => socket.off('newMessage', listener);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
