@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setChannels } from '../slices/channelsSlice.js';
 import { setMessages } from '../slices/messagesSlice.js';
 import { setCurrentChannelId } from '../slices/currentChannelIdSlice.js';
@@ -9,6 +9,7 @@ import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
 import useAuth from '../hooks/useAuth.js';
 import routes from '../routes.js';
+import getModal from '../components/modals';
 
 const getAuthHeader = (user) => {
   if (user && user.token) {
@@ -18,9 +19,17 @@ const getAuthHeader = (user) => {
   return {};
 };
 
+const renderModal = (modalInfo) => {
+  if (!modalInfo.type) return null;
+
+  const Modal = getModal(modalInfo.type);
+  return <Modal />;
+};
+
 const Chat = () => {
   const { user } = useAuth();
   const dispatch = useDispatch();
+  const { modalInfo } = useSelector((state) => state.modalReducer);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,6 +55,7 @@ const Chat = () => {
           </Col>
         </Row>
       </Container>
+      {renderModal(modalInfo)}
     </div>
   );
 };
