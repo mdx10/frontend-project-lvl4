@@ -3,7 +3,7 @@ import { Nav, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import ChannelItem from './ChannelItem.jsx';
 import { showModal } from '../slices/modalSlice.js';
-import { addChannel, removeChannel } from '../slices/channelsSlice.js';
+import { addChannel, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 import { setCurrentChannelId } from '../slices/currentChannelIdSlice.js';
 import socket from '../socket.js';
 
@@ -25,9 +25,13 @@ const Channels = () => {
         dispatch(setCurrentChannelId(defaultChannelId));
       }
     });
+    socket.on('renameChannel', ({ id, name }) => {
+      dispatch(renameChannel({ id, name }));
+    });
     return () => {
       socket.removeAllListeners('newChannel');
       socket.removeAllListeners('removeChannel');
+      socket.removeAllListeners('renameChannel');
     };
   }, [defaultChannelId, currentChannelId]);
 

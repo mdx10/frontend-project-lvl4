@@ -21,12 +21,11 @@ const Messages = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const listener = (message) => {
+    socket.on('newMessage', (message) => {
       dispatch(addMessage(message));
       console.log(message);
-    };
-    socket.on('newMessage', listener);
-    return () => socket.off('newMessage', listener);
+    });
+    return () => socket.removeAllListeners('newMessage');
   }, []);
 
   const handleSubmit = (e) => {

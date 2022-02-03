@@ -11,6 +11,7 @@ const ChannelItem = ({ id, name, removable }) => {
   const dispatch = useDispatch();
   const isActive = id === currentChannelId;
   const handleRemove = () => dispatch(showModal({ type: 'removeChannel', item: { id, name } }));
+  const handleRename = () => dispatch(showModal({ type: 'renameChannel', item: { id, name } }));
 
   if (!removable) {
     return (
@@ -35,7 +36,7 @@ const ChannelItem = ({ id, name, removable }) => {
 
         <Dropdown.Menu>
           <Dropdown.Item onClick={handleRemove}>Удалить</Dropdown.Item>
-          <Dropdown.Item onClick={() => console.log(2)}>Переименовать</Dropdown.Item>
+          <Dropdown.Item onClick={handleRename}>Переименовать</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Nav.Item>
