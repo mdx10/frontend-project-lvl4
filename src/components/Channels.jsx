@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Nav, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import ChannelItem from './ChannelItem.jsx';
 import { showModal } from '../slices/modalSlice.js';
+import { addChannel, removeChannel } from '../slices/channelsSlice.js';
+import { setCurrentChannelId } from '../slices/currentChannelIdSlice.js';
+import socket from '../socket.js';
 
 const Channels = () => {
   const { channels } = useSelector((state) => state.channelsReducer);
+  const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
+  const defaultChannelId = channels.find(({ name }) => name === 'general')?.id;
   const dispatch = useDispatch();
   const handleAddChannel = () => dispatch(showModal({ type: 'addChannel' }));
+
+  useEffect(() => {
+    socket.on('newChannel', (channel) => {
+      dispatch(addChannel(channel));
+      console.log(channel);
+    });
+    socket.on('removeChannel', ({ id }) => {
+      dispatch(removeChannel(id));
+      if (id === currentChannelId) {
+        dispatch(setCurrentChannelId(defaultChannelId));
+      }
+    });
+    return () => socket.removeAllListeners();
+  }, [defaultChannelId, currentChannelId]);
 
   return (
     <>

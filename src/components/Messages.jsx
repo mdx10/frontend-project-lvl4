@@ -8,6 +8,10 @@ import socket from '../socket.js';
 const Messages = () => {
   const { user } = useAuth();
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
+  const currentChannelName = useSelector((state) => {
+    const currentChannel = state.channelsReducer.channels.find(({ id }) => id === currentChannelId);
+    return currentChannel?.name;
+  });
   const messages = useSelector((state) => {
     const currentMessages = state.messagesReducer.messages
       .filter(({ channelId }) => channelId === currentChannelId);
@@ -42,7 +46,11 @@ const Messages = () => {
     <div className="d-flex flex-column h-100">
       <div className="bg-light mb-4 p-3 shadow-sm small">
         <p className="m-0">
-          <b># general</b>
+          <b>
+            #
+            {' '}
+            {currentChannelName}
+          </b>
         </p>
         <span className="text-muted">
           {messages.length}
