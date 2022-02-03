@@ -10,6 +10,7 @@ import Messages from '../components/Messages.jsx';
 import useAuth from '../hooks/useAuth.js';
 import routes from '../routes.js';
 import getModal from '../components/modals';
+import Header from '../components/Header.jsx';
 
 const getAuthHeader = (user) => {
   if (user && user.token) {
@@ -44,7 +45,7 @@ const Chat = () => {
 
   return (
     <div className="d-flex flex-column h-100">
-      <nav>Header</nav>
+      <Header />
       <Container className="h-100 my-4 overflow-hidden rounded shadow">
         <Row className="h-100 bg-white">
           <Col className="border-end pt-5 px-0 bg-light" xs={4} md={2}>
