@@ -25,7 +25,10 @@ const Channels = () => {
         dispatch(setCurrentChannelId(defaultChannelId));
       }
     });
-    return () => socket.removeAllListeners();
+    return () => {
+      socket.removeAllListeners('newChannel');
+      socket.removeAllListeners('removeChannel');
+    };
   }, [defaultChannelId, currentChannelId]);
 
   return (
