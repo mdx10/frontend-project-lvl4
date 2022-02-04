@@ -2,11 +2,13 @@ import React from 'react';
 import {
   Nav, ButtonGroup, Dropdown, Button,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentChannelId } from '../slices/currentChannelIdSlice';
 import { showModal } from '../slices/modalSlice';
 
 const ChannelItem = ({ id, name, removable }) => {
+  const { t } = useTranslation();
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
   const dispatch = useDispatch();
   const isActive = id === currentChannelId;
@@ -35,8 +37,8 @@ const ChannelItem = ({ id, name, removable }) => {
         <Dropdown.Toggle split variant={isActive ? 'secondary' : ''} />
 
         <Dropdown.Menu>
-          <Dropdown.Item onClick={handleRemove}>Удалить</Dropdown.Item>
-          <Dropdown.Item onClick={handleRename}>Переименовать</Dropdown.Item>
+          <Dropdown.Item onClick={handleRemove}>{t('chat.channels.removeBtn')}</Dropdown.Item>
+          <Dropdown.Item onClick={handleRename}>{t('chat.channels.renameBtn')}</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
     </Nav.Item>

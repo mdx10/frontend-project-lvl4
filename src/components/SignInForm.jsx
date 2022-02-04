@@ -4,15 +4,12 @@ import { Form, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 import useAutn from '../hooks/useAuth.js';
 
-const validationSchema = yup.object({
-  username: yup.string().required('Введите ник'),
-  password: yup.string().required('Введите пароль'),
-});
-
 const SignInForm = () => {
+  const { t } = useTranslation();
   const { logIn } = useAutn();
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,7 +20,10 @@ const SignInForm = () => {
       password: '',
     },
     initialStatus: {},
-    validationSchema,
+    validationSchema: yup.object({
+      username: yup.string().required(t('feedback.errors.required')),
+      password: yup.string().required(t('feedback.errors.required')),
+    }),
     onSubmit: async (values, { setStatus }) => {
       try {
         setStatus({});
@@ -33,7 +33,7 @@ const SignInForm = () => {
         console.log(data);
       } catch (err) {
         if (err.isAxiosError && err.response.status === 401) {
-          setStatus({ authFailed: 'Неверные имя пользователя или пароль' });
+          setStatus({ authFailed: t('feedback.errors.invalidAuthData') });
         }
         console.error(err);
       }
@@ -44,11 +44,11 @@ const SignInForm = () => {
       onSubmit={f.handleSubmit}
       autoComplete="off"
     >
-      <Form.FloatingLabel className="mb-3" controlId="username" label="Ваш ник">
+      <Form.FloatingLabel className="mb-3" controlId="username" label={t('signin.form.username')}>
         <Form.Control
           name="username"
           type="text"
-          placeholder="Ваш ник"
+          placeholder={t('signin.form.username')}
           disabled={f.isSubmitting}
           onChange={f.handleChange}
           onBlur={f.handleBlur}
@@ -57,11 +57,11 @@ const SignInForm = () => {
         />
         {f.errors.username && <Form.Control.Feedback type="invalid">{f.errors.username}</Form.Control.Feedback>}
       </Form.FloatingLabel>
-      <Form.FloatingLabel className="mb-3" controlId="password" label="Пароль">
+      <Form.FloatingLabel className="mb-3" controlId="password" label={t('signin.form.password')}>
         <Form.Control
           name="password"
           type="password"
-          placeholder="Пароль"
+          placeholder={t('signin.form.password')}
           disabled={f.isSubmitting}
           onChange={f.handleChange}
           onBlur={f.handleBlur}
@@ -72,7 +72,7 @@ const SignInForm = () => {
         {f.status.authFailed && <Form.Control.Feedback type="invalid">{f.status.authFailed}</Form.Control.Feedback>}
       </Form.FloatingLabel>
       <Button className="w-100" disabled={f.isSubmitting} type="submit" variant="outline-primary">
-        Войти
+        {t('signin.form.button')}
       </Button>
     </Form>
   );

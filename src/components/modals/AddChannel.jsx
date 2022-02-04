@@ -3,11 +3,13 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { hideModal } from '../../slices/modalSlice.js';
 import { setCurrentChannelId } from '../../slices/currentChannelIdSlice.js';
 import socket from '../../socket.js';
 
 const AddChannel = () => {
+  const { t } = useTranslation();
   const channelNames = useSelector((state) => state.channelsReducer.channels
     .map(({ name }) => name));
 
@@ -25,10 +27,10 @@ const AddChannel = () => {
     validationSchema: yup.object({
       name: yup
         .string()
-        .min(3, 'От 3 до 20 символов')
-        .max(20, 'От 3 до 20 символов')
-        .required('Обязательное поле')
-        .notOneOf(channelNames, 'Должно быть уникальным'),
+        .min(3, t('feedback.errors.minMax', { min: 3, max: 20 }))
+        .max(20, t('feedback.errors.minMax', { min: 3, max: 20 }))
+        .required(t('feedback.errors.required'))
+        .notOneOf(channelNames, t('feedback.errors.mustBeUnique')),
     }),
     validateOnChange: false,
     validateOnBlur: false,
@@ -45,12 +47,12 @@ const AddChannel = () => {
   return (
     <Modal show centered>
       <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.add.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={f.handleSubmit} autoComplete="off">
           <Form.Group className="mb-3" controlId="channelname">
-            <Form.Label visuallyHidden>Название канала</Form.Label>
+            <Form.Label visuallyHidden>{t('modals.add.body')}</Form.Label>
             <Form.Control
               ref={inputRef}
               onChange={f.handleChange}
@@ -58,17 +60,17 @@ const AddChannel = () => {
               value={f.values.name}
               name="name"
               type="text"
-              placeholder="Введите название"
+              placeholder={t('modals.add.body')}
               isInvalid={f.errors.name}
             />
             {f.errors.name && <Form.Control.Feedback type="invalid">{f.errors.name}</Form.Control.Feedback>}
           </Form.Group>
           <div className="d-flex justify-content-end">
             <Button className="me-2" variant="secondary" onClick={handleClose}>
-              Отменить
+              {t('modals.buttons.cancel')}
             </Button>
             <Button variant="primary" type="submit">
-              Отправить
+              {t('modals.buttons.submit')}
             </Button>
           </div>
         </Form>

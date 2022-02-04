@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
 import socket from '../socket.js';
 
 const Messages = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
   const currentChannelName = useSelector((state) => {
@@ -52,8 +54,7 @@ const Messages = () => {
           </b>
         </p>
         <span className="text-muted">
-          {messages.length}
-          {' сообщений'}
+          {t('chat.messages.messagesCount', { count: messages.length })}
         </span>
       </div>
       <div id="messages-box" className="chat-messages overflow-auto px-5">
@@ -74,8 +75,8 @@ const Messages = () => {
               className="border-0 p-0 ps-2"
               name="body"
               type="text"
-              placeholder="Введите сообщение..."
-              aria-label="Новое сообщение"
+              placeholder={t('chat.form.text')}
+              aria-label={t('chat.form.text')}
             />
             <button type="submit" className="btn btn-group-vertical" disabled="">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">

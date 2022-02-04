@@ -1,15 +1,17 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideModal } from '../../slices/modalSlice.js';
 import socket from '../../socket.js';
 
 const AddChannel = () => {
-  const { modalInfo } = useSelector((state) => state.modalReducer);
+  const { t } = useTranslation();
+  const { modalInfo: { item } } = useSelector((state) => state.modalReducer);
   const dispatch = useDispatch();
   const handleClose = () => dispatch(hideModal());
   const handleRemove = () => {
-    socket.emit('removeChannel', modalInfo.item, (res) => {
+    socket.emit('removeChannel', item, (res) => {
       if (res.status === 'ok') {
         handleClose();
       }
@@ -19,22 +21,18 @@ const AddChannel = () => {
   return (
     <Modal show centered>
       <Modal.Header closeButton onHide={handleClose}>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modals.remove.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p className="lead">
-          Канал
-          {' '}
-          <b>{modalInfo.item.name}</b>
-          {' '}
-          будет удален. Вы уверены?
+          {t('modals.remove.body', { name: item.name })}
         </p>
         <div className="d-flex justify-content-end">
           <Button className="me-2" variant="secondary" onClick={handleClose}>
-            Отменить
+            {t('modals.buttons.cancel')}
           </Button>
           <Button onClick={handleRemove} variant="danger" type="submit">
-            Удалить
+            {t('modals.buttons.remove')}
           </Button>
         </div>
       </Modal.Body>

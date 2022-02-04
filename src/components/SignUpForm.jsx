@@ -4,30 +4,33 @@ import { Form, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes.js';
 import useAutn from '../hooks/useAuth.js';
 
-const validationSchema = yup.object({
-  username: yup
-    .string()
-    .min(3, 'От 3 до 20 символов')
-    .max(20, 'От 3 до 20 символов')
-    .required('Обязательное поле'),
-  password: yup
-    .string()
-    .min(6, 'Не менее 6 символов')
-    .required('Обязательное поле'),
-  confirmPassword: yup
-    .string()
-    .required('Обязательное поле')
-    .oneOf([yup.ref('password')], 'Пароли должны совпадать'),
-});
-
 const SignUpForm = () => {
+  const { t } = useTranslation();
   const { logIn } = useAutn();
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || '/';
+
+  const validationSchema = yup.object({
+    username: yup
+      .string()
+      .min(3, t('feedback.errors.minMax', { min: 3, max: 20 }))
+      .max(20, t('feedback.errors.minMax', { min: 3, max: 20 }))
+      .required(t('feedback.errors.required')),
+    password: yup
+      .string()
+      .min(6, t('feedback.errors.min', { count: 6 }))
+      .required(t('feedback.errors.required')),
+    confirmPassword: yup
+      .string()
+      .required(t('feedback.errors.required'))
+      .oneOf([yup.ref('password')], t('feedback.errors.confirmPassword')),
+  });
+
   const f = useFormik({
     initialValues: {
       username: '',
@@ -45,7 +48,7 @@ const SignUpForm = () => {
         console.log(data);
       } catch (err) {
         if (err.isAxiosError && err.response.status === 409) {
-          setStatus({ signupFailed: 'Такой пользователь уже существует' });
+          setStatus({ signupFailed: t('feedback.errors.userAlreadyExists') });
         }
         console.error(err);
       }
@@ -56,11 +59,11 @@ const SignUpForm = () => {
       onSubmit={f.handleSubmit}
       autoComplete="off"
     >
-      <Form.FloatingLabel className="mb-3" controlId="username" label="Ваш ник">
+      <Form.FloatingLabel className="mb-3" controlId="username" label={t('signup.form.username')}>
         <Form.Control
           name="username"
           type="text"
-          placeholder="Ваш ник"
+          placeholder={t('signup.form.username')}
           disabled={f.isSubmitting}
           onChange={f.handleChange}
           onBlur={f.handleBlur}
@@ -69,11 +72,11 @@ const SignUpForm = () => {
         />
         {f.errors.username && <Form.Control.Feedback type="invalid">{f.errors.username}</Form.Control.Feedback>}
       </Form.FloatingLabel>
-      <Form.FloatingLabel className="mb-3" controlId="password" label="Пароль">
+      <Form.FloatingLabel className="mb-3" controlId="password" label={t('signup.form.password')}>
         <Form.Control
           name="password"
           type="password"
-          placeholder="Пароль"
+          placeholder={t('signup.form.password')}
           disabled={f.isSubmitting}
           onChange={f.handleChange}
           onBlur={f.handleBlur}
@@ -82,11 +85,11 @@ const SignUpForm = () => {
         />
         {f.errors.password && <Form.Control.Feedback type="invalid">{f.errors.password}</Form.Control.Feedback>}
       </Form.FloatingLabel>
-      <Form.FloatingLabel className="mb-3" controlId="confirmPassword" label="Пароль">
+      <Form.FloatingLabel className="mb-3" controlId="confirmPassword" label={t('signup.form.confirmPassword')}>
         <Form.Control
           name="confirmPassword"
           type="password"
-          placeholder="Пароль"
+          placeholder={t('signup.form.confirmPassword')}
           disabled={f.isSubmitting}
           onChange={f.handleChange}
           onBlur={f.handleBlur}
@@ -99,7 +102,7 @@ const SignUpForm = () => {
         {f.status.signupFailed && <Form.Control.Feedback type="invalid">{f.status.signupFailed}</Form.Control.Feedback>}
       </Form.FloatingLabel>
       <Button className="w-100" disabled={f.isSubmitting} type="submit" variant="outline-primary">
-        Зарегистрироваться
+        {t('signup.form.button')}
       </Button>
     </Form>
   );
