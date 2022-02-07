@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import * as Rollbar from '@rollbar/react';
@@ -9,7 +9,7 @@ import store from './slices/index.js';
 import '../assets/application.scss';
 import './i18n.js';
 import App from './App.jsx';
-import socket from './socket.js';
+// import socket from './socket.js';
 
 const rollbarConfig = {
   accessToken: '26e49ddc069544f38195dde6d96d2ac0',
@@ -20,7 +20,7 @@ const rollbarConfig = {
   },
 };
 
-ReactDOM.render(
+const init = (socket) => (
   <Rollbar.Provider config={rollbarConfig}>
     <Rollbar.ErrorBoundary>
       <Provider store={store}>
@@ -33,6 +33,7 @@ ReactDOM.render(
         </BrowserRouter>
       </Provider>
     </Rollbar.ErrorBoundary>
-  </Rollbar.Provider>,
-  document.getElementById('chat'),
+  </Rollbar.Provider>
 );
+
+export default init;
