@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
 import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
-import socket from '../socket.js';
+import useSocket from '../hooks/useSocket.js';
 
 const Messages = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const [text, setText] = useState('');
   const dispatch = useDispatch();
+  const socket = useSocket();
 
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
   const currentChannelName = useSelector((state) => {

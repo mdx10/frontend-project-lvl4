@@ -7,12 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { hideModal } from '../../slices/modalSlice.js';
 import { setCurrentChannelId } from '../../slices/currentChannelIdSlice.js';
-import socket from '../../socket.js';
+import useSocket from '../../hooks/useSocket.js';
 
 const AddChannel = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputRef = useRef();
+  const socket = useSocket();
 
   const channelNames = useSelector((state) => state.channelsReducer.channels
     .map(({ name }) => name));

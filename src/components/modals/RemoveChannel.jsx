@@ -4,11 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { hideModal } from '../../slices/modalSlice.js';
-import socket from '../../socket.js';
+import useSocket from '../../hooks/useSocket.js';
 
 const AddChannel = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const socket = useSocket();
 
   const { modalInfo: { item } } = useSelector((state) => state.modalReducer);
 

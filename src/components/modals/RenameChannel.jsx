@@ -6,12 +6,13 @@ import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { hideModal } from '../../slices/modalSlice.js';
-import socket from '../../socket.js';
+import useSocket from '../../hooks/useSocket.js';
 
 const RenameChannel = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const inputRef = useRef();
+  const socket = useSocket();
 
   const { modalInfo: { item } } = useSelector((state) => state.modalReducer);
   const channelNames = useSelector((state) => state.channelsReducer.channels

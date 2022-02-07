@@ -6,14 +6,17 @@ import ChannelItem from './ChannelItem.jsx';
 import { showModal } from '../slices/modalSlice.js';
 import { addChannel, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 import { setCurrentChannelId } from '../slices/currentChannelIdSlice.js';
-import socket from '../socket.js';
+import useSocket from '../hooks/useSocket.js';
 
 const Channels = () => {
   const { t } = useTranslation();
   const { channels } = useSelector((state) => state.channelsReducer);
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
-  const defaultChannelId = channels.find(({ name }) => name === 'general')?.id;
   const dispatch = useDispatch();
+  const socket = useSocket();
+
+  const defaultChannelId = channels.find(({ name }) => name === 'general')?.id;
+
   const handleAddChannel = () => dispatch(showModal({ type: 'addChannel' }));
 
   useEffect(() => {
