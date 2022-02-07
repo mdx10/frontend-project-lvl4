@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
 import socket from '../socket.js';
@@ -9,6 +10,9 @@ import socket from '../socket.js';
 const Messages = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const [text, setText] = useState('');
+  const dispatch = useDispatch();
+
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
   const currentChannelName = useSelector((state) => {
     const currentChannel = state.channelsReducer.channels.find(({ id }) => id === currentChannelId);
@@ -19,10 +23,10 @@ const Messages = () => {
       .filter(({ channelId }) => channelId === currentChannelId);
     return currentMessages;
   });
-  const [text, setText] = useState('');
-  const dispatch = useDispatch();
 
   useEffect(() => {
+    filter.loadDictionary('ru');
+
     socket.on('newMessage', (message) => {
       dispatch(addMessage(message));
       console.log(message);
@@ -34,7 +38,7 @@ const Messages = () => {
     e.preventDefault();
     if (text.trim()) {
       const message = {
-        body: text,
+        body: filter.clean(text),
         channelId: currentChannelId,
         username: user.username,
       };
