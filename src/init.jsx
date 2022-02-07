@@ -2,7 +2,7 @@ import React from 'react';
 // import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import * as Rollbar from '@rollbar/react';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { AuthProvider } from './contexts/authContext.jsx';
 import SocketContext from './contexts/socketContext.js';
 import store from './slices/index.js';
@@ -21,8 +21,8 @@ const rollbarConfig = {
 };
 
 const init = (socket) => (
-  <Rollbar.Provider config={rollbarConfig}>
-    <Rollbar.ErrorBoundary>
+  <RollbarProvider config={rollbarConfig}>
+    <ErrorBoundary>
       <Provider store={store}>
         <BrowserRouter>
           <AuthProvider>
@@ -32,8 +32,8 @@ const init = (socket) => (
           </AuthProvider>
         </BrowserRouter>
       </Provider>
-    </Rollbar.ErrorBoundary>
-  </Rollbar.Provider>
+    </ErrorBoundary>
+  </RollbarProvider>
 );
 
 export default init;
