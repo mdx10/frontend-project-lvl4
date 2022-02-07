@@ -4,22 +4,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { hideModal } from '../../slices/modalSlice.js';
 import socket from '../../socket.js';
 
 const RenameChannel = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const inputRef = useRef();
+
   const { modalInfo: { item } } = useSelector((state) => state.modalReducer);
   const channelNames = useSelector((state) => state.channelsReducer.channels
     .map(({ name }) => name));
 
-  const inputRef = useRef();
   useEffect(() => {
     inputRef.current.select();
   }, []);
 
-  const dispatch = useDispatch();
   const handleClose = () => dispatch(hideModal());
+  const notify = () => toast.success(t('feedback.success.renameChannel'));
+
   const f = useFormik({
     initialValues: {
       name: item.name,
@@ -42,6 +46,7 @@ const RenameChannel = () => {
       socket.emit('renameChannel', data, (res) => {
         if (res.status === 'ok') {
           dispatch(hideModal());
+          notify();
         }
       });
     },

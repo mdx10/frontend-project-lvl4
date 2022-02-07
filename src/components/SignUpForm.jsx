@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import routes from '../routes.js';
 import useAutn from '../hooks/useAuth.js';
 
@@ -14,6 +15,8 @@ const SignUpForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || '/';
+
+  const notify = () => toast.error(t('feedback.errors.networkProblem'));
 
   const validationSchema = yup.object({
     username: yup
@@ -47,9 +50,11 @@ const SignUpForm = () => {
         navigate(from, { replace: true });
         console.log(data);
       } catch (err) {
-        if (err.isAxiosError && err.response.status === 409) {
+        if (err.response && err.response.status === 409) {
           setStatus({ signupFailed: t('feedback.errors.userAlreadyExists') });
+          return;
         }
+        notify();
         console.error(err);
       }
     },

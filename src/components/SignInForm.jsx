@@ -5,6 +5,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import routes from '../routes.js';
 import useAutn from '../hooks/useAuth.js';
 
@@ -13,7 +14,11 @@ const SignInForm = () => {
   const { logIn } = useAutn();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const notify = () => toast.error(t('feedback.errors.networkProblem'));
+
   const from = location.state?.from?.pathname || '/';
+
   const f = useFormik({
     initialValues: {
       username: '',
@@ -32,9 +37,11 @@ const SignInForm = () => {
         navigate(from, { replace: true });
         console.log(data);
       } catch (err) {
-        if (err.isAxiosError && err.response.status === 401) {
+        if (err.response && err.response.status === 401) {
           setStatus({ authFailed: t('feedback.errors.invalidAuthData') });
+          return;
         }
+        notify();
         console.error(err);
       }
     },

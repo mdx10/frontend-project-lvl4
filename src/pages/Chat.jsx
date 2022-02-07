@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { setChannels } from '../slices/channelsSlice.js';
 import { setMessages } from '../slices/messagesSlice.js';
 import { setCurrentChannelId } from '../slices/currentChannelIdSlice.js';
@@ -28,17 +30,25 @@ const renderModal = (modalInfo) => {
 };
 
 const Chat = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const dispatch = useDispatch();
   const { modalInfo } = useSelector((state) => state.modalReducer);
 
+  const notify = () => toast.error(t('feedback.errors.networkProblem'));
+
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader(user) });
-      dispatch(setChannels(data.channels));
-      dispatch(setMessages(data.messages));
-      dispatch(setCurrentChannelId(data.currentChannelId));
-      console.log(data);
+      try {
+        const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader(user) });
+        dispatch(setChannels(data.channels));
+        dispatch(setMessages(data.messages));
+        dispatch(setCurrentChannelId(data.currentChannelId));
+        console.log(data);
+      } catch (err) {
+        notify();
+        console.error(err);
+      }
     };
     fetchData();
   }, []);

@@ -5,11 +5,12 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/scss/main.scss';
 import Login from './pages/Login.jsx';
 import SignUp from './pages/SignUp.jsx';
 import Chat from './pages/Chat.jsx';
 import NotFound from './pages/NotFound.jsx';
-import { AutnProvider } from './contexts/authContext.jsx';
 
 const RequireAuth = ({ children }) => {
   const location = useLocation();
@@ -21,7 +22,7 @@ const RequireAuth = ({ children }) => {
 };
 
 const App = () => (
-  <AutnProvider>
+  <>
     <Routes>
       <Route
         path="/"
@@ -35,7 +36,8 @@ const App = () => (
       <Route path="/signup" element={<SignUp />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
-  </AutnProvider>
+    <ToastContainer />
+  </>
 );
 
 export default App;

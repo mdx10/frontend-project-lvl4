@@ -1,9 +1,9 @@
 import React, { createContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const AutnContext = createContext({});
+const AuthContext = createContext({});
 
-const AutnProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
   const navigate = useNavigate();
 
@@ -21,10 +21,10 @@ const AutnProvider = ({ children }) => {
   };
 
   return (
-    <AutnContext.Provider value={authProviderValues}>
+    <AuthContext.Provider value={authProviderValues}>
       {children}
-    </AutnContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export { AutnContext, AutnProvider };
+export { AuthContext, AuthProvider };

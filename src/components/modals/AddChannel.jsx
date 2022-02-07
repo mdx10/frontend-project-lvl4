@@ -4,22 +4,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { hideModal } from '../../slices/modalSlice.js';
 import { setCurrentChannelId } from '../../slices/currentChannelIdSlice.js';
 import socket from '../../socket.js';
 
 const AddChannel = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const inputRef = useRef();
+
   const channelNames = useSelector((state) => state.channelsReducer.channels
     .map(({ name }) => name));
 
-  const inputRef = useRef();
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
-  const dispatch = useDispatch();
   const handleClose = () => dispatch(hideModal());
+  const notify = () => toast.success(t('feedback.success.addChannel'));
+
   const f = useFormik({
     initialValues: {
       name: '',
@@ -39,6 +43,7 @@ const AddChannel = () => {
         if (res.status === 'ok') {
           dispatch(setCurrentChannelId(res.data.id));
           dispatch(hideModal());
+          notify();
         }
       });
     },

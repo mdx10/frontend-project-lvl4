@@ -70,6 +70,12 @@ export default {
         userAlreadyExists: 'Такой пользователь уже существует',
         invalidAuthData: 'Неверные имя пользователя или пароль',
         mustBeUnique: 'Должно быть уникальным',
+        networkProblem: 'Ошибка соединения',
+      },
+      success: {
+        addChannel: 'Канал добавлен',
+        removeChannel: 'Канал удалён',
+        renameChannel: 'Канал переименован',
       },
     },
   },
