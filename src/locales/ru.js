@@ -30,6 +30,7 @@ export default {
     chat: {
       channels: {
         title: 'Каналы',
+        btnGroup: 'Управление каналом',
         removeBtn: 'Удалить',
         renameBtn: 'Переименовать',
       },

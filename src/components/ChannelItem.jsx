@@ -34,7 +34,9 @@ const ChannelItem = ({ id, name, removable }) => {
           {name}
         </Button>
 
-        <Dropdown.Toggle split variant={isActive ? 'secondary' : ''} />
+        <Dropdown.Toggle split variant={isActive ? 'secondary' : ''}>
+          <span className="visually-hidden">{t('chat.channels.btnGroup')}</span>
+        </Dropdown.Toggle>
 
         <Dropdown.Menu>
           <Dropdown.Item onClick={handleRemove}>{t('chat.channels.removeBtn')}</Dropdown.Item>
