@@ -39,7 +39,9 @@ export default {
         messagesCount_many: '{{count}} сообщений',
       },
       form: {
-        text: 'Введите сообщение...',
+        body: 'Введите сообщение...',
+        label: 'Новое сообщение',
+        button: 'Отправить',
       },
     },
     modals: {
