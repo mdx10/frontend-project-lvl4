@@ -77,7 +77,7 @@ export default {
         networkProblem: 'Ошибка соединения',
       },
       success: {
-        addChannel: 'Канал добавлен',
+        addChannel: 'Канал создан',
         removeChannel: 'Канал удалён',
         renameChannel: 'Канал переименован',
       },
