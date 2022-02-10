@@ -58,7 +58,7 @@ const AddChannel = () => {
       <Modal.Body>
         <Form onSubmit={f.handleSubmit} autoComplete="off">
           <Form.Group className="mb-3" controlId="channelname">
-            <Form.Label visuallyHidden>{t('modals.add.body')}</Form.Label>
+            <Form.Label visuallyHidden>{t('modals.add.label')}</Form.Label>
             <Form.Control
               ref={inputRef}
               onChange={f.handleChange}

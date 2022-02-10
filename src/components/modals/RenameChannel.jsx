@@ -61,7 +61,7 @@ const RenameChannel = () => {
       <Modal.Body>
         <Form onSubmit={f.handleSubmit} autoComplete="off">
           <Form.Group className="mb-3" controlId="channelname">
-            <Form.Label visuallyHidden>{t('modals.rename.body')}</Form.Label>
+            <Form.Label visuallyHidden>{t('modals.rename.label')}</Form.Label>
             <Form.Control
               ref={inputRef}
               onChange={f.handleChange}
