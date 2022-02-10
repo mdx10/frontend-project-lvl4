@@ -26,7 +26,8 @@ const Messages = () => {
   });
 
   useEffect(() => {
-    filter.loadDictionary('ru');
+    filter.loadDictionary();
+    filter.add(filter.getDictionary('ru'));
 
     socket.on('newMessage', (message) => {
       dispatch(addMessage(message));
@@ -50,6 +51,7 @@ const Messages = () => {
 
   return (
     <div className="d-flex flex-column h-100">
+      {console.log(filter.list())}
       <div className="bg-light mb-4 p-3 shadow-sm small">
         <p className="m-0">
           <b>
