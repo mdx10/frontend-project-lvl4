@@ -16,7 +16,7 @@ export default {
     signin: {
       title: 'Войти',
       form: {
-        username: 'Имя пользователя',
+        username: 'Ваш ник',
         password: 'Пароль',
         button: 'Войти',
       },
