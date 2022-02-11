@@ -44,7 +44,6 @@ const Chat = () => {
         dispatch(setChannels(data.channels));
         dispatch(setMessages(data.messages));
         dispatch(setCurrentChannelId(data.currentChannelId));
-        console.log(data);
       } catch (err) {
         notify();
         console.error(err);

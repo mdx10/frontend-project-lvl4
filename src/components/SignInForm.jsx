@@ -35,7 +35,6 @@ const SignInForm = () => {
         const { data } = await axios.post(routes.loginPath(), values);
         logIn(data);
         navigate(from, { replace: true });
-        console.log(data);
       } catch (err) {
         if (err.response && err.response.status === 401) {
           setStatus({ authFailed: t('feedback.errors.invalidAuthData') });

@@ -48,7 +48,6 @@ const SignUpForm = () => {
         const { data } = await axios.post(routes.signupPath(), values);
         logIn(data);
         navigate(from, { replace: true });
-        console.log(data);
       } catch (err) {
         if (err.response && err.response.status === 409) {
           setStatus({ signupFailed: t('feedback.errors.userAlreadyExists') });
