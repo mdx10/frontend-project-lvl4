@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
+import { animateScroll as scroll } from 'react-scroll';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import filter from 'leo-profanity';
@@ -8,21 +9,11 @@ import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
 import useSocket from '../hooks/useSocket.js';
 
-const scrollToBottom = (el) => {
-  console.log(el);
-  const top = el.scrollHeight - el.clientHeight;
-  el.scrollTo({
-    top,
-    behavior: 'smooth',
-  });
-};
-
 const Messages = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const dispatch = useDispatch();
   const inputRef = useRef();
-  const messagesBoxRef = useRef();
   const socket = useSocket();
 
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
@@ -37,8 +28,14 @@ const Messages = () => {
   });
 
   useEffect(() => {
-    scrollToBottom(messagesBoxRef.current);
     inputRef.current.focus();
+    scroll.scrollToBottom({
+      duration: 0,
+      containerId: 'messages-box',
+    });
+  }, [messages, currentChannelId]);
+
+  useEffect(() => {
     filter.loadDictionary();
     filter.add(filter.getDictionary('ru'));
 
@@ -46,7 +43,7 @@ const Messages = () => {
       dispatch(addMessage(message));
     });
     return () => socket.removeAllListeners('newMessage');
-  }, [currentChannelId, messages]);
+  }, []);
 
   const f = useFormik({
     initialValues: {
@@ -83,7 +80,7 @@ const Messages = () => {
           {t('chat.messages.messagesCount', { count: messages.length })}
         </span>
       </div>
-      <div ref={messagesBoxRef} id="messages-box" className="chat-messages overflow-auto px-5">
+      <div id="messages-box" className="chat-messages overflow-auto px-5">
         {messages.length > 0 && messages.map(({ id, body, username }) => (
           <div className="text-break mb-2" key={id}>
             <b>{username}</b>
