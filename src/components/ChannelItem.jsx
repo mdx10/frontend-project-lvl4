@@ -18,7 +18,7 @@ const ChannelItem = ({ id, name, removable }) => {
   if (!removable) {
     return (
       <Nav.Item className="w-100">
-        <Button className="w-100 rounded-0 text-start" variant={isActive ? 'secondary' : ''} onClick={() => dispatch(setCurrentChannelId(id))}>
+        <Button className="w-100 rounded-0 text-start overflow-hidden text-truncate" variant={isActive ? 'secondary' : ''} onClick={() => dispatch(setCurrentChannelId(id))}>
           <span className="me-1">#</span>
           {name}
         </Button>
@@ -29,7 +29,7 @@ const ChannelItem = ({ id, name, removable }) => {
   return (
     <Nav.Item className="w-100">
       <Dropdown className="d-flex" as={ButtonGroup}>
-        <Button className="w-100 rounded-0 text-start" variant={isActive ? 'secondary' : ''} onClick={() => dispatch(setCurrentChannelId(id))}>
+        <Button className="w-100 rounded-0 text-start overflow-hidden text-truncate" variant={isActive ? 'secondary' : ''} onClick={() => dispatch(setCurrentChannelId(id))}>
           <span className="me-1">#</span>
           {name}
         </Button>

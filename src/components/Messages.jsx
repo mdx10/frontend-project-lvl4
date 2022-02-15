@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +8,21 @@ import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
 import useSocket from '../hooks/useSocket.js';
 
+const scrollToBottom = (ref) => {
+  const el = ref.current;
+  const top = el.scrollHeight - el.clientHeight;
+  el.scrollTo({
+    top,
+    behavior: 'smooth',
+  });
+};
+
 const Messages = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const dispatch = useDispatch();
+  const inputRef = useRef();
+  const messagesBoxRef = useRef();
   const socket = useSocket();
 
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
@@ -26,6 +37,8 @@ const Messages = () => {
   });
 
   useEffect(() => {
+    scrollToBottom(messagesBoxRef);
+    inputRef.current.focus();
     filter.loadDictionary();
     filter.add(filter.getDictionary('ru'));
 
@@ -33,7 +46,7 @@ const Messages = () => {
       dispatch(addMessage(message));
     });
     return () => socket.removeAllListeners('newMessage');
-  }, []);
+  }, [currentChannelId, messages]);
 
   const f = useFormik({
     initialValues: {
@@ -70,7 +83,7 @@ const Messages = () => {
           {t('chat.messages.messagesCount', { count: messages.length })}
         </span>
       </div>
-      <div id="messages-box" className="chat-messages overflow-auto px-5">
+      <div ref={messagesBoxRef} id="messages-box" className="chat-messages overflow-auto px-5">
         {messages.length > 0 && messages.map(({ id, body, username }) => (
           <div className="text-break mb-2" key={id}>
             <b>{username}</b>
@@ -83,6 +96,7 @@ const Messages = () => {
         <Form onSubmit={f.handleSubmit} className="py-1 border rounded-2" autoComplete="off">
           <InputGroup hasValidation>
             <Form.Control
+              ref={inputRef}
               value={f.values.body}
               onChange={f.handleChange}
               onBlur={f.handleBlur}
