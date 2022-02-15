@@ -69,8 +69,8 @@ export default {
     feedback: {
       errors: {
         required: 'Обязательное поле',
-        min: 'Не менее {{count}} символов',
-        minMax: 'От {{min}} до {{max}} символов',
+        min: 'Не менее 6 символов',
+        minMax: 'От 3 до 20 символов',
         confirmPassword: 'Пароли должны совпадать',
         userAlreadyExists: 'Такой пользователь уже существует',
         invalidAuthData: 'Неверные имя пользователя или пароль',

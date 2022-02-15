@@ -26,8 +26,8 @@ const SignInForm = () => {
     },
     initialStatus: {},
     validationSchema: yup.object({
-      username: yup.string().required(t('feedback.errors.required')),
-      password: yup.string().required(t('feedback.errors.required')),
+      username: yup.string().required('feedback.errors.required'),
+      password: yup.string().required('feedback.errors.required'),
     }),
     onSubmit: async (values, { setStatus }) => {
       try {
@@ -37,7 +37,7 @@ const SignInForm = () => {
         navigate(from, { replace: true });
       } catch (err) {
         if (err.response && err.response.status === 401) {
-          setStatus({ authFailed: t('feedback.errors.invalidAuthData') });
+          setStatus({ authFailed: 'feedback.errors.invalidAuthData' });
           return;
         }
         notify();
@@ -61,7 +61,7 @@ const SignInForm = () => {
           value={f.values.username}
           isInvalid={(f.status.authFailed || f.errors.username) && f.touched.username}
         />
-        {f.errors.username && <Form.Control.Feedback type="invalid">{f.errors.username}</Form.Control.Feedback>}
+        {f.errors.username && <Form.Control.Feedback type="invalid">{t(f.errors.username)}</Form.Control.Feedback>}
       </Form.FloatingLabel>
       <Form.FloatingLabel className="mb-3" controlId="password" label={t('signin.form.password')}>
         <Form.Control
@@ -74,8 +74,8 @@ const SignInForm = () => {
           value={f.values.password}
           isInvalid={(f.status.authFailed || f.errors.password) && f.touched.password}
         />
-        {f.errors.password && <Form.Control.Feedback type="invalid">{f.errors.password}</Form.Control.Feedback>}
-        {f.status.authFailed && <Form.Control.Feedback type="invalid">{f.status.authFailed}</Form.Control.Feedback>}
+        {f.errors.password && <Form.Control.Feedback type="invalid">{t(f.errors.password)}</Form.Control.Feedback>}
+        {f.status.authFailed && <Form.Control.Feedback type="invalid">{t(f.status.authFailed)}</Form.Control.Feedback>}
       </Form.FloatingLabel>
       <Button className="w-100" disabled={f.isSubmitting} type="submit" variant="outline-primary">
         {t('signin.form.button')}

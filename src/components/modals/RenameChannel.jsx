@@ -32,10 +32,10 @@ const RenameChannel = () => {
     validationSchema: yup.object({
       name: yup
         .string()
-        .min(3, t('feedback.errors.minMax', { min: 3, max: 20 }))
-        .max(20, t('feedback.errors.minMax', { min: 3, max: 20 }))
-        .required(t('feedback.errors.required'))
-        .notOneOf(channelNames, t('feedback.errors.mustBeUnique')),
+        .min(3, 'feedback.errors.minMax')
+        .max(20, 'feedback.errors.minMax')
+        .required('feedback.errors.required')
+        .notOneOf(channelNames, 'feedback.errors.mustBeUnique'),
     }),
     validateOnChange: false,
     validateOnBlur: false,
@@ -72,7 +72,7 @@ const RenameChannel = () => {
               placeholder={t('modals.rename.body')}
               isInvalid={f.errors.name}
             />
-            {f.errors.name && <Form.Control.Feedback type="invalid">{f.errors.name}</Form.Control.Feedback>}
+            {f.errors.name && <Form.Control.Feedback type="invalid">{t(f.errors.name)}</Form.Control.Feedback>}
           </Form.Group>
           <div className="d-flex justify-content-end">
             <Button className="me-2" variant="secondary" onClick={handleClose}>
