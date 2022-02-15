@@ -1,5 +1,5 @@
 const rollbarConfig = {
-  accessToken: '26e49ddc069544f38195dde6d96d2ac0',
+  accessToken: process.env.ROLLBAR_TOKEN,
   captureUncaught: true,
   captureUnhandledRejections: true,
   payload: {
