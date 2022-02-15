@@ -1,18 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { animateScroll as scroll } from 'react-scroll';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import filter from 'leo-profanity';
-import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
 import useSocket from '../hooks/useSocket.js';
 
 const Messages = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const dispatch = useDispatch();
   const messageInputRef = useRef();
   const socket = useSocket();
 
@@ -35,16 +33,6 @@ const Messages = () => {
       containerId: 'messages-box',
     });
   }, [messages]);
-
-  useEffect(() => {
-    filter.loadDictionary();
-    filter.add(filter.getDictionary('ru'));
-
-    socket.on('newMessage', (message) => {
-      dispatch(addMessage(message));
-    });
-    return () => socket.removeAllListeners('newMessage');
-  }, []);
 
   const f = useFormik({
     initialValues: {

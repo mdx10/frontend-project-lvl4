@@ -1,46 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Nav, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import ChannelItem from './ChannelItem.jsx';
 import { showModal } from '../slices/modalSlice.js';
-import {
-  addChannel,
-  removeChannel,
-  renameChannel,
-  setCurrentChannelId,
-} from '../slices/channelsSlice.js';
-import useSocket from '../hooks/useSocket.js';
 
 const Channels = () => {
   const { t } = useTranslation();
-  const { channels, currentChannelId } = useSelector((state) => state.channelsReducer);
+  const { channels } = useSelector((state) => state.channelsReducer);
   const dispatch = useDispatch();
-  const socket = useSocket();
-
-  const defaultChannelId = channels.find(({ name }) => name === 'general')?.id;
 
   const handleAddChannel = () => dispatch(showModal({ type: 'addChannel' }));
-
-  useEffect(() => {
-    socket.on('newChannel', (channel) => {
-      dispatch(addChannel(channel));
-    });
-    socket.on('removeChannel', ({ id }) => {
-      dispatch(removeChannel(id));
-      if (id === currentChannelId) {
-        dispatch(setCurrentChannelId(defaultChannelId));
-      }
-    });
-    socket.on('renameChannel', ({ id, name }) => {
-      dispatch(renameChannel({ id, name }));
-    });
-    return () => {
-      socket.removeAllListeners('newChannel');
-      socket.removeAllListeners('removeChannel');
-      socket.removeAllListeners('renameChannel');
-    };
-  }, [defaultChannelId, currentChannelId]);
 
   return (
     <>
