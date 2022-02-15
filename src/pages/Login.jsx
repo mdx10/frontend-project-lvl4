@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Header from '../components/Header.jsx';
 import SignInForm from '../components/SignInForm.jsx';
+import routes from '../routes.js';
 
 const Login = () => {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ const Login = () => {
             <p className="mt-3">
               {t('signin.noAccount')}
               {' '}
-              <Link to="/signup">{t('signin.registrationLink')}</Link>
+              <Link to={routes.signupPagePath()}>{t('signin.registrationLink')}</Link>
             </p>
           </Col>
         </Row>

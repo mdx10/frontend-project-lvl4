@@ -10,13 +10,16 @@ import Login from './pages/Login.jsx';
 import SignUp from './pages/SignUp.jsx';
 import Chat from './pages/Chat.jsx';
 import NotFound from './pages/NotFound.jsx';
+import routes from './routes.js';
 
 const RequireAuth = ({ children }) => {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem('user'));
 
   return (
-    user && user.token ? children : <Navigate to="/login" state={{ from: location }} replace />
+    user && user.token
+      ? children
+      : <Navigate to={routes.loginPagePath()} state={{ from: location }} replace />
   );
 };
 
@@ -24,15 +27,15 @@ const App = () => (
   <>
     <Routes>
       <Route
-        path="/"
+        path={routes.homePagePath()}
         element={(
           <RequireAuth>
             <Chat />
           </RequireAuth>
         )}
       />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
+      <Route path={routes.loginPagePath()} element={<Login />} />
+      <Route path={routes.signupPagePath()} element={<SignUp />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
     <ToastContainer />

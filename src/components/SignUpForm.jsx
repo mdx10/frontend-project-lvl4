@@ -14,7 +14,7 @@ const SignUpForm = () => {
   const { logIn } = useAutn();
   const location = useLocation();
   const navigate = useNavigate();
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || routes.homePagePath();
 
   const notify = () => toast.error(t('feedback.errors.networkProblem'));
 

@@ -3,6 +3,7 @@ import { Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header.jsx';
+import routes from '../routes.js';
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ const NotFound = () => {
       <Header />
       <Container className="text-center">
         <h1 className="my-5">{t('notFound.title')}</h1>
-        <Link to="/">{t('notFound.homeLink')}</Link>
+        <Link to={routes.homePagePath()}>{t('notFound.homeLink')}</Link>
       </Container>
     </>
   );

@@ -17,7 +17,7 @@ const SignInForm = () => {
 
   const notify = () => toast.error(t('feedback.errors.networkProblem'));
 
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || routes.homePagePath();
 
   const f = useFormik({
     initialValues: {

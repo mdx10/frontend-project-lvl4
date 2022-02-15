@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/useAuth.js';
+import routes from '../routes.js';
 
 const Header = () => {
   const { user, logOut } = useAuth();
@@ -10,7 +11,7 @@ const Header = () => {
   return (
     <Navbar className="shadow-sm" expand="lg" bg="white" variant="light">
       <Container>
-        <Link className="navbar-brand" to="/">{t('header.logo')}</Link>
+        <Link className="navbar-brand" to={routes.homePagePath()}>{t('header.logo')}</Link>
         {user && (
           <div className="d-flex align-items-center">
             <span className="me-2">{user.username}</span>
