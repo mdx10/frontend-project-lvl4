@@ -4,12 +4,12 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentChannelId } from '../slices/currentChannelIdSlice';
-import { showModal } from '../slices/modalSlice';
+import { setCurrentChannelId } from '../slices/channelsSlice.js';
+import { showModal } from '../slices/modalSlice.js';
 
 const ChannelItem = ({ id, name, removable }) => {
   const { t } = useTranslation();
-  const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
+  const { currentChannelId } = useSelector((state) => state.channelsReducer);
   const dispatch = useDispatch();
   const isActive = id === currentChannelId;
   const handleRemove = () => dispatch(showModal({ type: 'removeChannel', item: { id, name } }));

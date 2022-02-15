@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, batch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { setChannels } from '../slices/channelsSlice.js';
+import { setChannels, setCurrentChannelId } from '../slices/channelsSlice.js';
 import { setMessages } from '../slices/messagesSlice.js';
-import { setCurrentChannelId } from '../slices/currentChannelIdSlice.js';
 import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
 import useAuth from '../hooks/useAuth.js';
@@ -41,9 +40,11 @@ const Chat = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(routes.dataPath(), { headers: getAuthHeader(user) });
-        dispatch(setChannels(data.channels));
-        dispatch(setMessages(data.messages));
-        dispatch(setCurrentChannelId(data.currentChannelId));
+        batch(() => {
+          dispatch(setChannels(data.channels));
+          dispatch(setMessages(data.messages));
+          dispatch(setCurrentChannelId(data.currentChannelId));
+        });
       } catch (err) {
         notify();
         console.error(err);

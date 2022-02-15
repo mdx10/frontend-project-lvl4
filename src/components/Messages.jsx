@@ -16,11 +16,9 @@ const Messages = () => {
   const messageInputRef = useRef();
   const socket = useSocket();
 
-  const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
-  const currentChannelName = useSelector((state) => {
-    const currentChannel = state.channelsReducer.channels.find(({ id }) => id === currentChannelId);
-    return currentChannel?.name;
-  });
+  const { currentChannelId, channels } = useSelector((state) => state.channelsReducer);
+  const currentChannelName = channels.find(({ id }) => id === currentChannelId)?.name;
+
   const messages = useSelector((state) => {
     const currentMessages = state.messagesReducer.messages
       .filter(({ channelId }) => channelId === currentChannelId);
