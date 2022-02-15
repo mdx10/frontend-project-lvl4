@@ -13,7 +13,7 @@ const Messages = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const inputRef = useRef();
+  const messageInputRef = useRef();
   const socket = useSocket();
 
   const { currentChannelId } = useSelector((state) => state.currentChannelIdReducer);
@@ -28,12 +28,15 @@ const Messages = () => {
   });
 
   useEffect(() => {
-    inputRef.current.focus();
+    messageInputRef.current.focus();
+  }, [currentChannelId]);
+
+  useEffect(() => {
     scroll.scrollToBottom({
       duration: 0,
       containerId: 'messages-box',
     });
-  }, [messages, currentChannelId]);
+  }, [messages]);
 
   useEffect(() => {
     filter.loadDictionary();
@@ -59,6 +62,7 @@ const Messages = () => {
       socket.emit('newMessage', message, (res) => {
         if (res.status === 'ok') {
           resetForm();
+          messageInputRef.current.focus();
           return;
         }
         console.error('Message was not sent');
@@ -93,7 +97,7 @@ const Messages = () => {
         <Form onSubmit={f.handleSubmit} className="py-1 border rounded-2" autoComplete="off">
           <InputGroup hasValidation>
             <Form.Control
-              ref={inputRef}
+              ref={messageInputRef}
               value={f.values.body}
               onChange={f.handleChange}
               onBlur={f.handleBlur}
