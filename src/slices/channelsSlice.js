@@ -18,7 +18,7 @@ const channelsSlice = createSlice({
       const removeChannelId = actions.payload;
       state.channels = state.channels.filter(({ id }) => id !== removeChannelId);
       if (removeChannelId === state.currentChannelId) {
-        const defaultChannelId = state.channels.find(({ name }) => name === 'general').id;
+        const defaultChannelId = state.channels[0].id;
         state.currentChannelId = defaultChannelId;
       }
     },
