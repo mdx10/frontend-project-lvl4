@@ -8,8 +8,8 @@ import { addMessage } from '../slices/messagesSlice.js';
 import useAuth from '../hooks/useAuth.js';
 import useSocket from '../hooks/useSocket.js';
 
-const scrollToBottom = (ref) => {
-  const el = ref.current;
+const scrollToBottom = (el) => {
+  console.log(el);
   const top = el.scrollHeight - el.clientHeight;
   el.scrollTo({
     top,
@@ -37,7 +37,7 @@ const Messages = () => {
   });
 
   useEffect(() => {
-    scrollToBottom(messagesBoxRef);
+    scrollToBottom(messagesBoxRef.current);
     inputRef.current.focus();
     filter.loadDictionary();
     filter.add(filter.getDictionary('ru'));
